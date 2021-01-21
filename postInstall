@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -ex
+
+# Setup alias and environment variables
+mkdir -p /home/bonito # Will become HOME and WORKDIR
+touch /home/bonito/.bashrc
+{
+    echo 'alias ls="ls --color=auto"'
+    echo 'alias ll="ls -hla"'
+    echo 'export PS1="\[\033[36m\]\u\[\033[m\]@\[\033[32m\]bonito:\[\033[33;1m\]\w\[\033[m\]$ "' # Prettify prompt
+} >> /home/bonito/.bashrc
+
+pip3 install wheel
+pip3 install ont-bonito
