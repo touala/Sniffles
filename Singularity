@@ -12,7 +12,7 @@ For more information, please consult https://github.com/touala/bonito
 %post
     # Install basic dependencies
     dnf upgrade -y
-    dnf group install -y "Development Tools"
+    dnf group install -y "Development Tools"
     dnf install -y python3-devel
     dnf install -y zlib-devel
 
