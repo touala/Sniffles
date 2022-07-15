@@ -2,13 +2,30 @@
 set -ex
 
 # Setup alias and environment variables
-mkdir -p /home/bonito # Will become HOME and WORKDIR
-touch /home/bonito/.bashrc
+mkdir -p /home/sniffles # Will become HOME and WORKDIR
+touch /home/sniffles/.bashrc
 {
     echo 'alias ls="ls --color=auto"'
     echo 'alias ll="ls -hla"'
-    echo 'export PS1="\[\033[36m\]\u\[\033[m\]@\[\033[32m\]bonito:\[\033[33;1m\]\w\[\033[m\]$ "' # Prettify prompt
-} >> /home/bonito/.bashrc
+    echo 'export PS1="\[\033[36m\]\u\[\033[m\]@\[\033[32m\]sniffles:\[\033[33;1m\]\w\[\033[m\]$ "' # Prettify prompt
+} >> /home/sniffles/.bashrc
 
-pip3 install wheel
-pip3 install ont-bonito
+# Install and setup conda
+curl -O https://repo.anaconda.com/miniconda/Miniconda3-4.6.14-Linux-x86_64.sh
+sh Miniconda3-4.6.14-Linux-x86_64.sh -b -p /miniconda3
+rm -rf Miniconda3-4.6.14-Linux-x86_64.sh
+export PATH=$PATH:/miniconda3/bin
+
+# Update conda
+conda update -n base -c defaults conda
+conda config --set auto_activate_base false
+
+# Install WhatsHap
+conda install -y -c conda-forge mamba
+conda install -y -c bioconda sniffles=2.0
+
+# Add to PATH with conda activation
+touch /usr/local/bin/run_sniffles
+chmod 755 /usr/local/bin/run_sniffles
+echo -e '#!/bin/bash\nsource /home/sniffles/.bashrc\neval "$(conda shell.bash hook)"\nconda activate sniffles\n\nsniffles $@\n' > /usr/local/bin/run_sniffles
+
